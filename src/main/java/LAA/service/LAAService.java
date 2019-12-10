@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
-
 import LAA.parser.FileLog;
 
 public class LAAService {
@@ -26,10 +23,9 @@ private static final String UPLOAD_FOLDER = System.getenv("HOMEPATH");
 	private final List<FileLog> files = new ArrayList<FileLog>();
 	
 	public Response uploadFile(
-			@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+			InputStream uploadedInputStream) {
 		
-		if (uploadedInputStream == null || fileDetail == null)
+		if (uploadedInputStream == null)
 			return Response.status(400).entity("Invalid form data").build();
 		
 		try {
@@ -39,7 +35,7 @@ private static final String UPLOAD_FOLDER = System.getenv("HOMEPATH");
 					.entity("Can not create destination folder on server")
 					.build();
 		}
-		String uploadedFileLocation = UPLOAD_FOLDER + fileDetail.getFileName();
+		String uploadedFileLocation = UPLOAD_FOLDER + "test.log";
 		try {
 			saveToFile(uploadedInputStream, uploadedFileLocation);
 		} catch (IOException e) {

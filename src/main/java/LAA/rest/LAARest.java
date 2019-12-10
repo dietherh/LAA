@@ -2,12 +2,14 @@ package LAA.rest;
 
 import java.io.InputStream;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
+
 import LAA.service.LAAService;
 
 @Path("/laa")
@@ -19,16 +21,16 @@ public class LAARest {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(
-			@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail) {
-		return lAAService.uploadFile(uploadedInputStream, fileDetail);
+			InputStream uploadedInputStream) {
+		return lAAService.uploadFile(uploadedInputStream);
 	}
 	
 	
-	@Path("/getMetrics")
-	@POST
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response getMetrics(String metric, long timestamp, String type) {
+	@Path("/getMetrics/{metric}/{timestamp}/{type}")
+	@GET
+	public Response getMetrics(@PathParam("metric") String metric, 
+			@PathParam("timestamp") long timestamp,
+			@PathParam("type") String type) {
 		return lAAService.getMetrics(metric, timestamp, type);
 	}
 	
